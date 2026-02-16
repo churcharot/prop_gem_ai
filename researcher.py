@@ -28,7 +28,8 @@ class TrendResearcher:
     CACHE_FILE = "trends_cache.json"
 
     def __init__(self):
-        self.api_key = OPENROUTER_API_KEY
+        import config
+        self.api_key = config.OPENROUTER_API_KEY  # Read at runtime so st.secrets override works
         self.base_url = OPENROUTER_BASE_URL
         self.model = RESEARCH_MODEL
         self.referer = APP_URL

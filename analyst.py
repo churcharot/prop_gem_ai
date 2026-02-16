@@ -55,7 +55,8 @@ class PropAnalyst:
     CACHE_FILE = "analysis_cache.json"
 
     def __init__(self):
-        self.api_key = OPENROUTER_API_KEY
+        import config
+        self.api_key = config.OPENROUTER_API_KEY  # Read at runtime so st.secrets override works
         self.base_url = OPENROUTER_BASE_URL
         self.model = ANALYSIS_MODEL
         self.referer = APP_URL

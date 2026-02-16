@@ -23,7 +23,8 @@ class OddsFetcher:
     BASE_URL = "https://api.the-odds-api.com/v4/sports"
 
     def __init__(self):
-        self.api_key = ODDS_API_KEY
+        import config
+        self.api_key = config.ODDS_API_KEY  # Read at runtime so st.secrets override works
         self.cache_file = CACHE_FILE
 
     def _load_cache(self, cache_key: str = "default", cache_minutes: int = 15):
