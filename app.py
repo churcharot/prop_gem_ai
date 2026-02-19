@@ -5,6 +5,7 @@ Interactive player prop analysis with AI-powered edge detection
 
 import streamlit as st
 import pandas as pd
+from datetime import datetime, timezone, timedelta
 from typing import Dict
 from fetcher import OddsFetcher
 from researcher import TrendResearcher
@@ -295,6 +296,30 @@ def main():
     if not schedule:
         st.sidebar.error("No games available.")
         return
+    
+    # Filter to only show the next slate of games (Eastern Time)
+    # The API returns multiple days — we only want the earliest game day
+    eastern_offset = timedelta(hours=-5)  # EST (UTC-5)
+    
+    # Parse all game dates in ET and find the earliest day
+    game_dates = {}
+    for game in schedule:
+        ct = game.get('commence_time', '')
+        if not ct:
+            continue
+        try:
+            game_utc = datetime.fromisoformat(ct.replace('Z', '+00:00'))
+            game_et = game_utc.astimezone(timezone(eastern_offset))
+            game_date = game_et.date()
+            if game_date not in game_dates:
+                game_dates[game_date] = []
+            game_dates[game_date].append(game)
+        except (ValueError, TypeError):
+            continue
+    
+    if game_dates:
+        earliest_date = min(game_dates.keys())
+        schedule = game_dates[earliest_date]
     
     # Create game options
     game_options = {}
