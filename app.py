@@ -65,6 +65,18 @@ st.markdown("""
         border-radius: 10px;
         text-align: center;
     }
+    /* Make input labels visible on dark background */
+    .stTextInput > label, .stSelectbox > label, .stNumberInput > label,
+    .stTextInput label p, .stSelectbox label p, .stNumberInput label p,
+    [data-testid="stTextInput"] label, [data-testid="stSelectbox"] label,
+    [data-testid="stNumberInput"] label,
+    [data-testid="stTextInput"] label p, [data-testid="stSelectbox"] label p,
+    [data-testid="stNumberInput"] label p,
+    .stTextInput label span, .stSelectbox label span, .stNumberInput label span,
+    [data-testid="stWidgetLabel"] p {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -452,16 +464,21 @@ def main():
         col1, col2 = st.columns(2)
         
         with col1:
-            manual_player = st.text_input("Player Name", placeholder="e.g. LeBron James")
+            st.markdown('<p style="color: #ffd700; font-weight: 600; margin-bottom: 0.2rem;">Player Name</p>', unsafe_allow_html=True)
+            manual_player = st.text_input("Player Name", placeholder="e.g. LeBron James", label_visibility="collapsed")
+            st.markdown('<p style="color: #ffd700; font-weight: 600; margin-bottom: 0.2rem;">Stat Type</p>', unsafe_allow_html=True)
             manual_stat = st.selectbox(
                 "Stat Type",
                 options=["Points", "Rebounds", "Assists"],
-                index=0
+                index=0,
+                label_visibility="collapsed"
             )
         
         with col2:
-            manual_line = st.number_input("Line", min_value=0.5, max_value=100.0, value=25.5, step=0.5)
-            manual_odds = st.number_input("Odds (Decimal)", min_value=1.01, max_value=10.0, value=1.91, step=0.01)
+            st.markdown('<p style="color: #ffd700; font-weight: 600; margin-bottom: 0.2rem;">Line</p>', unsafe_allow_html=True)
+            manual_line = st.number_input("Line", min_value=0.5, max_value=100.0, value=25.5, step=0.5, label_visibility="collapsed")
+            st.markdown('<p style="color: #ffd700; font-weight: 600; margin-bottom: 0.2rem;">Odds (Decimal)</p>', unsafe_allow_html=True)
+            manual_odds = st.number_input("Odds (Decimal)", min_value=1.01, max_value=10.0, value=1.91, step=0.01, label_visibility="collapsed")
         
         # Map stat type to API format
         stat_map = {"Points": "PTS", "Rebounds": "REB", "Assists": "AST"}
